@@ -78,6 +78,22 @@ if (isset($_GET['start'])) {
                 continue;
             }
         }
+        // Select new filenames (with date) if not already exists
+        preg_match('/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/', $new_files[$i], $output_array);
+        $fname = $new_files[$i];
+        if (sizeof($output_array) == 0) {
+            $new_filename = '../' . $config['upload_dir'] . date('Y-m-d') . '_' . $new_files[$i];
+            $new_filename = str_replace(' ', '_', $new_filename);
+            $appendix = 1;
+            while (file_exists($new_filename)) {
+                $new_filename = '../' . $config['upload_dir'] . date('Y-m-d') . '_' . $appendix . '_' . basename($new_files[$i]);
+                $new_filename = str_replace(' ', '_', $new_filename);
+                $appendix++;
+            }
+            $new_filename = strtolower($new_filename);
+            rename('../' . $config['upload_dir'] . $new_files[$i], $new_filename);
+            $fname = $new_filename;
+        }
         // Get audio metadata (duration, bitrate etc)
         $getID3 = new getID3;
         $fileinfo = $getID3->analyze('../' . $config['upload_dir'] . $new_files[$i]);
@@ -91,6 +107,7 @@ if (isset($_GET['start'])) {
         $episodefeed = '<?xml version="1.0" encoding="utf-8"?>
 <PodcastGenerator>
 	<episode>
+	    <guid>' . htmlspecialchars($config['url'] . "?" . $link . "=" . $fname) . '</guid>
 	    <titlePG><![CDATA[' . htmlspecialchars($title, ENT_NOQUOTES) . ']]></titlePG>
 	    <shortdescPG><![CDATA[' . htmlspecialchars($comment) . ']]></shortdescPG>
 	    <longdescPG><![CDATA[' . htmlspecialchars($comment) . ']]></longdescPG>
@@ -114,22 +131,6 @@ if (isset($_GET['start'])) {
 	    </fileInfoPG>
 	</episode>
 </PodcastGenerator>';
-        // Select new filenames (with date) if not already exists
-        preg_match('/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/', $new_files[$i], $output_array);
-        $fname = $new_files[$i];
-        if (sizeof($output_array) == 0) {
-            $new_filename = '../' . $config['upload_dir'] . date('Y-m-d') . '_' . $new_files[$i];
-            $new_filename = str_replace(' ', '_', $new_filename);
-            $appendix = 1;
-            while (file_exists($new_filename)) {
-                $new_filename = '../' . $config['upload_dir'] . date('Y-m-d') . '_' . $appendix . '_' . basename($new_files[$i]);
-                $new_filename = str_replace(' ', '_', $new_filename);
-                $appendix++;
-            }
-            $new_filename = strtolower($new_filename);
-            rename('../' . $config['upload_dir'] . $new_files[$i], $new_filename);
-            $fname = $new_filename;
-        }
         // Write image if set
         if (isset($fileinfo['comments']['picture'])) {
             $imgext = ($fileinfo['comments']['picture'][0]['image_mime'] == 'image/png') ? 'png' : 'jpg';

@@ -79,6 +79,10 @@ if (sizeof($_POST) > 0) {
         goto error;
     }
 
+    $link = str_replace('?', '', $config['link']);
+    $link = str_replace('=', '', $link);
+    $link = str_replace('$url', '', $link);
+
     $targetfile = '../' . $config['upload_dir'] . $_GET['name'];
 
     // Get datetime
@@ -102,7 +106,8 @@ if (sizeof($_POST) > 0) {
     // It easier to not dynamically generate the file
     $episodefeed = '<?xml version="1.0" encoding="utf-8"?>
 <PodcastGenerator>
-	<episode>
+    <episode>
+	    <guid>' . htmlspecialchars($config['url'] . "?" . $link . "=" . $targetfile) . '</guid>
 	    <titlePG><![CDATA[' . htmlspecialchars($_POST['title'], ENT_NOQUOTES) . ']]></titlePG>
 	    <shortdescPG><![CDATA[' . htmlspecialchars($_POST['shortdesc']) . ']]></shortdescPG>
 	    <longdescPG><![CDATA[' . htmlspecialchars($long_desc) . ']]></longdescPG>
