@@ -101,13 +101,16 @@ if (sizeof($_POST) > 0) {
     // Automatically fill an empty long description with the contents
     // of the short description.
     $long_desc = empty($_POST['longdesc']) ? $_POST['shortdesc'] : $_POST['longdesc'];
-        
+
+    // Regenerate GUID if it is missing from POST data
+    $guid = empty($_POST['guid']) ? $config['url'] . "?" . $link . "=" . $targetfile : $_POST['guid'];
+
     // Go and actually generate the episode
     // It easier to not dynamically generate the file
     $episodefeed = '<?xml version="1.0" encoding="utf-8"?>
 <PodcastGenerator>
     <episode>
-	    <guid>' . htmlspecialchars($config['url'] . "?" . $link . "=" . $targetfile) . '</guid>
+	    <guid>' . htmlspecialchars($guid) . '</guid>
 	    <titlePG><![CDATA[' . htmlspecialchars($_POST['title'], ENT_NOQUOTES) . ']]></titlePG>
 	    <shortdescPG><![CDATA[' . htmlspecialchars($_POST['shortdesc']) . ']]></shortdescPG>
 	    <longdescPG><![CDATA[' . htmlspecialchars($long_desc) . ']]></longdescPG>
@@ -141,6 +144,7 @@ if (sizeof($_POST) > 0) {
 }
 // Get episode data
 $episode = simplexml_load_file('../' . $config['upload_dir'] . pathinfo('../' . $config['upload_dir'] . $_GET['name'], PATHINFO_FILENAME) . '.xml');
+$guid = isset($episode->episode->guid) ? $episode->episode->guid : $config['url'] . "?" . $link . "=" . $targetfile;
 ?>
 <!DOCTYPE html>
 <html>
@@ -170,6 +174,7 @@ $episode = simplexml_load_file('../' . $config['upload_dir'] . pathinfo('../' . 
                 <div class="col-6">
                     <h3><?php echo _('Main Information'); ?></h3>
                     <hr>
+                    <input type="hidden" name="guid" value="<?php echo htmlspecialchars($guid); ?>">
                     <div class="form-group">
                         <?php echo _('Title'); ?>*:<br>
                         <input type="text" name="title" class="form-control" value="<?php echo htmlspecialchars($episode->episode->titlePG); ?>" required>
