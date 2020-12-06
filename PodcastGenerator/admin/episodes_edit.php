@@ -103,7 +103,7 @@ if (sizeof($_POST) > 0) {
     $long_desc = empty($_POST['longdesc']) ? $_POST['shortdesc'] : $_POST['longdesc'];
 
     // Regenerate GUID if it is missing from POST data
-    $guid = empty($_POST['guid']) ? $config['url'] . "?" . $link . "=" . $targetfile : $_POST['guid'];
+    $guid = empty($_POST['guid']) ? $config['url'] . "?" . $link . "=" . $_GET['name'] : $_POST['guid'];
 
     // Go and actually generate the episode
     // It easier to not dynamically generate the file
@@ -144,7 +144,6 @@ if (sizeof($_POST) > 0) {
 }
 // Get episode data
 $episode = simplexml_load_file('../' . $config['upload_dir'] . pathinfo('../' . $config['upload_dir'] . $_GET['name'], PATHINFO_FILENAME) . '.xml');
-$guid = isset($episode->episode->guid) ? $episode->episode->guid : $config['url'] . "?" . $link . "=" . $targetfile;
 ?>
 <!DOCTYPE html>
 <html>
@@ -174,7 +173,7 @@ $guid = isset($episode->episode->guid) ? $episode->episode->guid : $config['url'
                 <div class="col-6">
                     <h3><?php echo _('Main Information'); ?></h3>
                     <hr>
-                    <input type="hidden" name="guid" value="<?php echo htmlspecialchars($guid); ?>">
+                    <input type="hidden" name="guid" value="<?php echo htmlspecialchars($episode->episode->guid); ?>">
                     <div class="form-group">
                         <?php echo _('Title'); ?>*:<br>
                         <input type="text" name="title" class="form-control" value="<?php echo htmlspecialchars($episode->episode->titlePG); ?>" required>
