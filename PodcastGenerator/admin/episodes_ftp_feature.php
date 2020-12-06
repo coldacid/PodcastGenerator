@@ -78,42 +78,6 @@ if (isset($_GET['start'])) {
                 continue;
             }
         }
-        // Get audio metadata (duration, bitrate etc)
-        $getID3 = new getID3;
-        $fileinfo = $getID3->analyze('../' . $config['upload_dir'] . $new_files[$i]);
-        $duration = $fileinfo['playtime_string'];           // Get duration
-        $bitrate = $fileinfo['audio']['bitrate'];           // Get bitrate
-        $frequency = $fileinfo['audio']['sample_rate'];     // Frequency
-        $title = getID3Tag($fileinfo, 'title', pathinfo('../' . $config['upload_dir'] . $new_files[$i], PATHINFO_FILENAME));
-        $comment = getID3Tag($fileinfo, 'comment', $title);
-        $author_name = getID3Tag($fileinfo, 'artist', '');
-
-        $episodefeed = '<?xml version="1.0" encoding="utf-8"?>
-<PodcastGenerator>
-	<episode>
-	    <titlePG>' . htmlspecialchars($title, ENT_NOQUOTES) . '</titlePG>
-	    <shortdescPG><![CDATA[' . $comment . ']]></shortdescPG>
-	    <longdescPG><![CDATA[' . $comment . ']]></longdescPG>
-	    <imgPG></imgPG>
-	    <categoriesPG>
-	        <category1PG>uncategorized</category1PG>
-	        <category2PG></category2PG>
-	        <category3PG></category3PG>
-	    </categoriesPG>
-	    <keywordsPG></keywordsPG>
-	    <explicitPG>' . htmlspecialchars($config['explicit_podcast']) . '</explicitPG>
-	    <authorPG>
-	        <namePG>'. $author_name .'</namePG>
-	        <emailPG></emailPG>
-	    </authorPG>
-	    <fileInfoPG>
-	        <size>' . intval(filesize('../' . $config['upload_dir'] . $new_files[$i]) / 1000 / 1000) . '</size>
-	        <duration>' . $duration . '</duration>
-	        <bitrate>' . substr(strval($bitrate), 0, 3) . '</bitrate>
-	        <frequency>' . $frequency . '</frequency>
-	    </fileInfoPG>
-	</episode>
-</PodcastGenerator>';
         // Select new filenames (with date) if not already exists
         preg_match('/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/', $new_files[$i], $output_array);
         $fname = $new_files[$i];
@@ -130,6 +94,43 @@ if (isset($_GET['start'])) {
             rename('../' . $config['upload_dir'] . $new_files[$i], $new_filename);
             $fname = $new_filename;
         }
+        // Get audio metadata (duration, bitrate etc)
+        $getID3 = new getID3;
+        $fileinfo = $getID3->analyze('../' . $config['upload_dir'] . $new_files[$i]);
+        $duration = $fileinfo['playtime_string'];           // Get duration
+        $bitrate = $fileinfo['audio']['bitrate'];           // Get bitrate
+        $frequency = $fileinfo['audio']['sample_rate'];     // Frequency
+        $title = getID3Tag($fileinfo, 'title', pathinfo('../' . $config['upload_dir'] . $new_files[$i], PATHINFO_FILENAME));
+        $comment = getID3Tag($fileinfo, 'comment', $title);
+        $author_name = getID3Tag($fileinfo, 'artist', '');
+
+        $episodefeed = '<?xml version="1.0" encoding="utf-8"?>
+<PodcastGenerator>
+	<episode>
+	    <guid>' . htmlspecialchars($config['url'] . "?" . $link . "=" . basename($fname)) . '</guid>
+	    <titlePG>' . htmlspecialchars($title, ENT_NOQUOTES) . '</titlePG>
+	    <shortdescPG><![CDATA[' . $comment . ']]></shortdescPG>
+	    <longdescPG><![CDATA[' . $comment . ']]></longdescPG>
+	    <imgPG></imgPG>
+	    <categoriesPG>
+	        <category1PG>uncategorized</category1PG>
+	        <category2PG></category2PG>
+	        <category3PG></category3PG>
+	    </categoriesPG>
+	    <keywordsPG></keywordsPG>
+	    <explicitPG>' . htmlspecialchars($config['explicit_podcast']) . '</explicitPG>
+	    <authorPG>
+	        <namePG>'. $author_name .'</namePG>
+	        <emailPG></emailPG>
+	    </authorPG>
+	    <fileInfoPG>
+	        <size>' . intval(filesize($fname) / 1000 / 1000) . '</size>
+	        <duration>' . $duration . '</duration>
+	        <bitrate>' . substr(strval($bitrate), 0, 3) . '</bitrate>
+	        <frequency>' . $frequency . '</frequency>
+	    </fileInfoPG>
+	</episode>
+</PodcastGenerator>';
         // Write image if set
         if (isset($fileinfo['comments']['picture'])) {
             $imgext = ($fileinfo['comments']['picture'][0]['image_mime'] == 'image/png') ? 'png' : 'jpg';
