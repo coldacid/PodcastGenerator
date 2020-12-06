@@ -107,7 +107,7 @@ if (isset($_GET['start'])) {
         $episodefeed = '<?xml version="1.0" encoding="utf-8"?>
 <PodcastGenerator>
 	<episode>
-	    <guid>' . htmlspecialchars($config['url'] . "?" . $link . "=" . $fname) . '</guid>
+	    <guid>' . htmlspecialchars($config['url'] . "?" . $link . "=" . basename($fname)) . '</guid>
 	    <titlePG><![CDATA[' . htmlspecialchars($title, ENT_NOQUOTES) . ']]></titlePG>
 	    <shortdescPG><![CDATA[' . htmlspecialchars($comment) . ']]></shortdescPG>
 	    <longdescPG><![CDATA[' . htmlspecialchars($comment) . ']]></longdescPG>
@@ -124,7 +124,7 @@ if (isset($_GET['start'])) {
 	        <emailPG></emailPG>
 	    </authorPG>
 	    <fileInfoPG>
-	        <size>' . intval(filesize('../' . $config['upload_dir'] . $new_files[$i]) / 1000 / 1000) . '</size>
+	        <size>' . intval(filesize($fname) / 1000 / 1000) . '</size>
 	        <duration>' . $duration . '</duration>
 	        <bitrate>' . substr(strval($bitrate), 0, 3) . '</bitrate>
 	        <frequency>' . $frequency . '</frequency>
