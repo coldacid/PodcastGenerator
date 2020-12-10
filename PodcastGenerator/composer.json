@@ -1,0 +1,27 @@
+{
+    "name": "podcastgenerator/podcastgenerator",
+    "description": "Open Source Podcast Publishing Solution since 2006",
+    "version": "3.2.0",
+    "keywords": [
+        "podcast",
+        "podcasting",
+        "website generator"
+    ],
+    "license": "GPL-3",
+    "authors": [
+        {
+            "name": "Emil Engler",
+            "homepage": "http://www.emilengler.com",
+            "role": "Primary developer"
+        },
+        {
+            "name": "Alberto Betella",
+            "homepage": "https://betella.net",
+            "role": "Original developer"
+        }
+    ],
+    "require": {
+        "composer/installers": "~1.9.0",
+        "james-heinrich/getid3": "~1.9.19"
+    }
+}
