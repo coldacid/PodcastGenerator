@@ -44,6 +44,17 @@ if (isset($_GET['edit'])) {
             echo '<p style="color: red;"><strong>' . $error . '</strong></p>';
         } ?>
         <form action="pg_integrations.php?edit=1" method="POST">
+            <section>
+                <h2><?php echo _('Podcast Index'); ?>:</h2>
+                <?php echo _('API key'); ?>:<br>
+                <input type="text" name="pi_api_key" value="<?php echo htmlspecialchars($config['pi_api_key']); ?>"><br>
+                <?php echo _('API secret'); ?>:<br>
+                <input type="password" name="pi_api_secret" value="<?php echo htmlspecialchars($config['pi_api_secret']); ?>"><br>
+                <?php echo _('Podcast ID'); ?>:<br>
+                <small><?php echo _('Enter the ID number for your show in Podcast Index or click "Add Show" to add your show to the index'); ?></small><br>
+                <input type="text" name="pi_podcast_id" value="<?php echo $config['pi_podcast_id']; ?>"><br>
+                <hr>
+            </section>
             <input type="submit" value="<?php echo _("Submit"); ?>" class="btn btn-success"><br>
         </form>
     </div>
