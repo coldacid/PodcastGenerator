@@ -64,6 +64,9 @@ function generateRSS()
     if ($config['itunes_category[2]'] != '' || $config['itunes_category[1]'] == 'null') {
         $feedhead .= itunes_category($config['itunes_category[2]']);
     }
+    if ($config['websub_server'] && $config['websub_server'] != 'null') {
+        $feedhead .= '		<atom:link href="' . $config['websub_server'] . '" rel="hub" />' . "\n";
+    }
     // Get supported file extensions
     $supported_extensions = array();
     $supported_extensions_xml = simplexml_load_file($config['absoluteurl'] . 'components/supported_media/supported_media.xml');
