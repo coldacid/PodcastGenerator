@@ -105,6 +105,14 @@ function createconf($username, $password) {
 
 \$users_json = \"{\\\"".$username."\\\": \\\"".str_replace("\$", "\\\$", $password)."\\\"}\";
 
+#####################
+# Podcast Index
+
+\$pi_api_key = \"\";
+\$pi_api_secret = \"\";
+
+\$pi_podcast_id = 0; // is the podcast in Podcast Index? This is its show ID there.
+
 // END OF CONFIG
 ";
     $f = fopen("../config.php", 'w');

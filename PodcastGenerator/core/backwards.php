@@ -92,6 +92,14 @@ function backwards_3_1_to_3_2($absoluteurl)
 
 \$users_json = \"".$config['users_json']."\";
 
+#####################
+# Podcast Index
+
+\$pi_api_key = \"\";
+\$pi_api_secret = \"\";
+
+\$pi_podcast_id = 0; // is the podcast in Podcast Index? This is its show ID there.
+
 // END OF CONFIG
 ";
     file_put_contents($absoluteurl . 'config.php', $config_php);
