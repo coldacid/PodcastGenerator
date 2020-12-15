@@ -47,6 +47,8 @@ function arrayEpisode($item, $episode, $_config)
     $append_array = [
         'episode' => [
             'titlePG' => $item->titlePG,
+            'episodeNumPG' => $item->episodeNumPG,
+            'seasonNumPG' => $item->seasonNumPG,
             'shortdescPG' => $item->shortdescPG,
             'longdescPG' => $item->longdescPG,
             'imgPG' => $item->imgPG,
