@@ -234,12 +234,13 @@ $episode = simplexml_load_file('../' . $config['upload_dir'] . pathinfo('../' . 
                         <?php echo _('Long Description'); ?>:<br>
                         <textarea name="longdesc"><?php echo htmlspecialchars($episode->episode->longdescPG); ?></textarea><br>
                     </div>
-                    <?php echo _('Episode Number'); ?>:<br>
-                        <input type="text" name="episodenum" pattern="[0-9]*" class="form-control"><br>
+                    <div class="form-group">
+                        <?php echo _('Episode Number'); ?>:<br>
+                        <input type="text" name="episodenum" pattern="[0-9]*" class="form-control" value="<?php echo htmlspecialchars($episode->episode->episodeNumPG); ?>"><br>
                     </div>
                     <div class="form-group">
                         <?php echo _('Season Number'); ?>:<br>
-                        <input type="text" name="seasonnum" pattern="[0-9]*" class="form-control"><br>
+                        <input type="text" name="seasonnum" pattern="[0-9]*" class="form-control" value="<?php echo htmlspecialchars($episode->episode->seasonNumPG); ?>"><br>
                     </div>
                     <div class="form-group">
                         <?php echo _('iTunes Keywords'); ?>:<br>
