@@ -88,10 +88,18 @@ if (isset($_GET['start'])) {
         $comment = getID3Tag($fileinfo, 'comment', $title);
         $author_name = getID3Tag($fileinfo, 'artist', '');
 
+        $episode_num = getID3Tag($fileinfo, 'track_number', null);
+        $season_num = getID3Tag($fileinfo, 'part_of_a_set', '');
+        if ($season_num && strpos($season_num, '/')) {
+            $season_num = explode('/', $season_num)[0]; // in case total set count is included!
+        }
+
         $episodefeed = '<?xml version="1.0" encoding="utf-8"?>
 <PodcastGenerator>
 	<episode>
 	    <titlePG>' . htmlspecialchars($title, ENT_NOQUOTES) . '</titlePG>
+	    <episodeNumPG>' . $episode_num . '</episodeNumPG>
+	    <seasonNumPG>' . $season_num . '</seasonNumPG>
 	    <shortdescPG><![CDATA[' . $comment . ']]></shortdescPG>
 	    <longdescPG><![CDATA[' . $comment . ']]></longdescPG>
 	    <imgPG></imgPG>
