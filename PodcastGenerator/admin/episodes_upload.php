@@ -11,6 +11,7 @@ require 'checkLogin.php';
 require '../core/include_admin.php';
 
 if (sizeof($_POST) > 0) {
+    checkToken();
     // CHeck if all fields are set (except "category")
     $req_fields = [
         $_POST['title'],
@@ -30,10 +31,10 @@ if (sizeof($_POST) > 0) {
     // If no categories were selected, add the 'uncategorized'
     // category.  Otherwise, ensure that no more than three categories
     // were actually selected.
-    if (sizeof((array)$_POST['category']) == 0) {
+    if (empty($_POST['category'])) {
         $_POST['category'] = array();
         array_push($_POST['category'], 'uncategorized');
-    } else if (sizeof((array)$_POST['category']) > 3) {
+    } else if (isset($_POST['category']) && sizeof((array)$_POST['category']) > 3) {
         $error = _('Too many categories selected (max: 3)');
         goto error;
     }
@@ -301,6 +302,7 @@ if (sizeof($_POST) > 0) {
                         <input type="text" class="form-control" name="authorname" placeholder="<?php echo htmlspecialchars($config["author_name"]); ?>"><br>
                         <input type="email" class="form-control" name="authoremail" placeholder="<?php echo htmlspecialchars($config["author_email"]); ?>"><br>
                     </div>
+                    <input type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>">
                     <input type="submit" class="btn btn-success btn-lg" value="<?php echo _('Upload episode'); ?>">
                 </div>
             </div>
