@@ -214,16 +214,16 @@ function indexEpisodes($_config)
         preg_match('/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/', $new_files[$i], $output_array);
         $fname = $new_files[$i];
         if (sizeof($output_array) == 0) {
-            $new_filename = '../' . $config['upload_dir'] . date('Y-m-d') . '_' . $new_files[$i];
+            $new_filename = $_config['absoluteurl'] . $_config['upload_dir'] . date('Y-m-d') . '_' . $new_files[$i];
             $new_filename = str_replace(' ', '_', $new_filename);
             $appendix = 1;
             while (file_exists($new_filename)) {
-                $new_filename = '../' . $config['upload_dir'] . date('Y-m-d') . '_' . $appendix . '_' . basename($new_files[$i]);
+                $new_filename = $_config['absoluteurl'] . $_config['upload_dir'] . date('Y-m-d') . '_' . $appendix . '_' . basename($new_files[$i]);
                 $new_filename = str_replace(' ', '_', $new_filename);
                 $appendix++;
             }
             $new_filename = strtolower($new_filename);
-            rename('../' . $config['upload_dir'] . $new_files[$i], $new_filename);
+            rename($_config['absoluteurl'] . $_config['upload_dir'] . $new_files[$i], $new_filename);
             $fname = $new_filename;
         }
         // Get audio metadata (duration, bitrate etc)
@@ -241,6 +241,10 @@ function indexEpisodes($_config)
         if ($season_num && strpos($season_num, '/')) {
             $season_num = explode('/', $season_num)[0]; // in case total set count is included!
         }
+
+        $link = str_replace('?', '', $config['link']);
+        $link = str_replace('=', '', $link);
+        $link = str_replace('$url', '', $link);
 
         $episodefeed = '<?xml version="1.0" encoding="utf-8"?>
 <PodcastGenerator>
