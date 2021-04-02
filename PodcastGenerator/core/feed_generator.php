@@ -67,6 +67,9 @@ function generateRSS()
     if ($config['websub_server'] && $config['websub_server'] != 'null') {
         $feedhead .= '		<atom:link href="' . $config['websub_server'] . '" rel="hub" />' . "\n";
     }
+    if ($config['websub_server'] != '') {
+        $feedhead .= '		<atom:link href="' . $config['websub_server'] . '" rel="hub" />' . "\n";
+    }
     // Get supported file extensions
     $supported_extensions = array();
     $supported_extensions_xml = simplexml_load_file($config['absoluteurl'] . 'components/supported_media/supported_media.xml');
